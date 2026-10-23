@@ -1,17 +1,15 @@
+// app/products/[slug]/page.tsx
 import { Suspense } from "react";
-import { getProductById } from "@/lib/products";
+import { getProductBySlug, getProducts } from "@/lib/products";
 import ProductSkeleton from "@/components/ProductSkeleton";
 
 export async function generateStaticParams() {
-  return [
-    { id: "1" },
-    { id: "2" },
-    { id: "3" },
-  ];
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
-async function ProductDetail({ id }: { id: string }) {
-  const product = await getProductById(id);
+async function ProductDetail({ slug }: { slug: string }) {
+  const product = await getProductBySlug(slug);
 
   if (!product) return <p className="text-red-500">Produk tidak ditemukan.</p>;
 
@@ -31,7 +29,7 @@ async function ProductDetail({ id }: { id: string }) {
 export default async function ProductDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = await params;
 
@@ -42,7 +40,7 @@ export default async function ProductDetailPage({
       </p>
 
       <Suspense fallback={<ProductSkeleton />}>
-        <ProductDetail id={resolvedParams.id} />
+        <ProductDetail slug={resolvedParams.slug} />
       </Suspense>
     </main>
   );
