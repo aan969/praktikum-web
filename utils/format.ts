@@ -1,4 +1,3 @@
-// utils/format.ts
 export function formatList<T>(items: T[], toLabel: (item: T) => string): string {
   return items.map(toLabel).join(", ");
 }

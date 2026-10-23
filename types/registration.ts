@@ -11,7 +11,6 @@ export function validateRequired<T extends Record<string, any>>(data: T): (keyof
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
       const value = data[key];
-      // Cek apakah nilai undefined, null, atau string kosong
       if (
         value === undefined ||
         value === null ||
